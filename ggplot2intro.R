@@ -40,12 +40,16 @@ aes() possui os seguintes parametros
 #variaveis continuas
 ggplot(iris, aes(x = Petal.Length, y = Petal.Width, color = Sepal.Length)) + 
   geom_point() +
-  scale_colour_gradient(low = "white",high = "black")
+  scale_colour_gradient(low = "blue",high = "red")
 
 #variaveis discretas
 ggplot(mtcars, aes(x = mpg,y = hp, color = factor(cyl)))+
   geom_point() +
   scale_color_manual(values = c("orange", "black", "red"))
+
+#gerando cores
+color <- colorRampPalette(c("red","yellow", "green"))
+color(12)
 
 #As funções utilizadas para controlar 
 #as escalas dos elementos de um gráfico do ggplot2 seguem um padrão.
@@ -61,7 +65,8 @@ p + scale_x_continuous(name = "Petal Length", breaks = seq(1,7,1)) +
 #wrap
 p2 = ggplot(diamonds, aes(x = carat, y = price, color = clarity))
 p2 = p2 +  geom_point()
-wrap= p2 + facet_wrap(~ cut,scales = "free_x") ###
+p2
+wrap= p2 + facet_wrap(~ cut,scales = "free") ###
 
 #grid
 ggplot(diamonds, aes(x = carat, y = price)) +
@@ -96,14 +101,15 @@ ggplot(dados4,aes(x = country, y = lifeExp)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 ggplot(dados1,aes(x = continent, y = lifeExp, fill = factor(year))) +
-  geom_col()
-
-ggplot(dados1,aes(x = continent, y = lifeExp, fill = factor(year))) +
-  geom_col(position = "dodge") +
+  geom_col(color = "black")
+  
+ggplot(dados2,aes(x = continent, y = lifeExp, fill = factor(year))) +
+  geom_col(position = "dodge", color = "grey") +
   labs(title = "Expectativa devidaporcontinente",
        x = "Continente",
        y = "Anos",
-       fill = "Ano")
+       fill = "Ano")+
+  scale_fill_discrete(color(12))
 #  + coord_flip()
 
 ### GRAFICO DE LINHAS ###
@@ -126,14 +132,13 @@ ggplot(dados2,aes(x = year, y = lifeExp, color = continent)) +
 ### histograma e freqplot ###
 ggplot(dados3,aes(x = lifeExp)) +
   geom_histogram(binwidth = 5, fill = 'dodgerblue', color = 'black') +
-  labs(title = "Distribuição daexpectativavida",
+  labs(title = "Distribuição da expectativa vida",
        x = "Anos",
        y = "Contagem")
 
 ggplot(dados3,aes(x = lifeExp)) +
-  geom_histogram(binwidth = 5, fill = 'dodgerblue', color = 'black') +
   geom_freqpoly(binwidth = 5) +
-  labs(title = "Distribuição daexpectativavida",
+  labs(title = "Distribuição da expectativa vida",
        x = "Anos",
        y = "Contagem")
 
@@ -158,4 +163,4 @@ ggplot(dados4,aes(x = lifeExp, y = reorder(country, lifeExp))) +
   labs(title = "Expectativa devidaporpaís-2007",
        y = "País",
        x = "Anos") +
-  theme_economist()
+  theme_light()
