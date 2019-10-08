@@ -13,6 +13,23 @@ library(ggplot2)
 library(tidyverse)
 library(dplyr)
 
+### dados utilizados ###
+dados1 <- gapminder %>%
+  filter(year == max(year),
+         continent == "Americas")
+
+dados2 <- gapminder %>%
+  filter(year %in% c(1957, 2007)) %>%
+  # Converte o ano para factor - será categoria no gráfico
+  mutate(year = factor(year)) %>%
+  group_by(continent, year) %>%
+  summarise(lifeExp = mean(lifeExp)) 
+
+dados3 <-gapminder %>%
+  mutate(year = factor(year)) %>%
+  group_by(continent, year) %>%
+  summarise(lifeExp = mean(lifeExp)) 
+
 ###  BASICO  ###
 p = ggplot(iris, aes(x = Petal.Length, y = Petal.Width))
 p = p + geom_point()
@@ -85,22 +102,6 @@ ggplot(gapminder, aes(x = factor(year), y = lifeExp)) +
 ### GRAFICO DE BARRAS ###
 ggplot(diamonds, aes(x = cut)) +
   geom_bar()
-
-dados1 <- gapminder %>%
-  filter(year == max(year),
-         continent == "Americas")
-
-dados2 <- gapminder %>%
-  filter(year %in% c(1957, 2007)) %>%
-  # Converte o ano para factor - será categoria no gráfico
-  mutate(year = factor(year)) %>%
-  group_by(continent, year) %>%
-  summarise(lifeExp = mean(lifeExp)) 
-
-dados3 <-gapminder %>%
-  mutate(year = factor(year)) %>%
-  group_by(continent, year) %>%
-  summarise(lifeExp = mean(lifeExp)) 
 
 ggplot(dados1,aes(x = country, y = lifeExp)) +
   geom_bar(stat = "identity", fill = "dodgerblue") +
