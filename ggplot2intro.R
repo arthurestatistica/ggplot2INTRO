@@ -13,12 +13,6 @@ library(ggplot2)
 library(tidyverse)
 library(dplyr)
 
-### DADOS UTILIZADOS ###
-dados1 <- read.csv2("dados1.csv")
-dados2 <- read.csv2("dados2.csv")
-dados3 <- read.csv2("dados3.csv")
-dados4 <- read.csv2("dados4.csv")
-
 ###  BASICO  ###
 p = ggplot(iris, aes(x = Petal.Length, y = Petal.Width))
 p = p + geom_point()
@@ -48,7 +42,7 @@ ggplot(mtcars, aes(x = mpg,y = hp, color = factor(cyl)))+
   scale_color_manual(values = c("orange", "black", "red"))
 
 #gerando cores
-color <- colorRampPalette(c("red","yellow", "green"))
+color <- colorRampPalette(c("black","red", "blue"))
 color(12)
 
 #As funções utilizadas para controlar 
@@ -92,35 +86,54 @@ ggplot(gapminder, aes(x = factor(year), y = lifeExp)) +
 ggplot(diamonds, aes(x = cut)) +
   geom_bar()
 
-ggplot(dados4,aes(x = country, y = lifeExp)) +
-  geom_col(stat = "identity", fill = "dodgerblue") +
+dados1 <- gapminder %>%
+  filter(year == max(year),
+         continent == "Americas")
+
+dados2 <- gapminder %>%
+  filter(year %in% c(1957, 2007)) %>%
+  # Converte o ano para factor - será categoria no gráfico
+  mutate(year = factor(year)) %>%
+  group_by(continent, year) %>%
+  summarise(lifeExp = mean(lifeExp)) 
+
+dados3 <-gapminder %>%
+  mutate(year = factor(year)) %>%
+  group_by(continent, year) %>%
+  summarise(lifeExp = mean(lifeExp)) 
+
+ggplot(dados1,aes(x = country, y = lifeExp)) +
+  geom_bar(stat = "identity", fill = "dodgerblue") +
   labs(title = "Expectativa de vida por país",
        subtitle = "2007",
        x = "País",
        y = "Expectativa de Vida")+
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-ggplot(dados1,aes(x = continent, y = lifeExp, fill = factor(year))) +
-  geom_col(color = "black")
-  
 ggplot(dados2,aes(x = continent, y = lifeExp, fill = factor(year))) +
-  geom_col(position = "dodge", color = "grey") +
-  labs(title = "Expectativa devidaporcontinente",
+  geom_bar(stat = "identity", color = "black")
+
+ggplot(dados3,aes(x = continent, y = lifeExp, fill = year)) +
+  geom_bar(stat = "identity", position = "dodge", color = "grey") +
+  labs(title = "Expectativa de vida por continente",
        x = "Continente",
        y = "Anos",
-       fill = "Ano")+
-  scale_fill_discrete(color(12))
-#  + coord_flip()
+       fill = "Ano")
 
 ### GRAFICO DE LINHAS ###
-ggplot(dados2,aes(x = year, y = lifeExp, color = continent)) +
+
+dados4 <- gapminder %>%
+  group_by(continent, year) %>%
+  summarise(lifeExp = mean(lifeExp)) 
+
+ggplot(dados4,aes(x = year, y = lifeExp, color = continent)) +
   geom_line() +
   labs(title = "Evolução daexpectativadevidaporcontinente",
        x = "Ano",
        y = "Anos devida",
        color = "Continente")
 
-ggplot(dados2,aes(x = year, y = lifeExp, color = continent)) +
+ggplot(dados4,aes(x = year, y = lifeExp, color = continent)) +
   geom_line() +
   geom_point() +
   labs(title = "Evolução daexpectativadevidaporcontinente",
@@ -130,26 +143,26 @@ ggplot(dados2,aes(x = year, y = lifeExp, color = continent)) +
        shape = "Continente")
 
 ### histograma e freqplot ###
-ggplot(dados3,aes(x = lifeExp)) +
+ggplot(dados1,aes(x = lifeExp)) +
   geom_histogram(binwidth = 5, fill = 'dodgerblue', color = 'black') +
   labs(title = "Distribuição da expectativa vida",
        x = "Anos",
        y = "Contagem")
 
-ggplot(dados3,aes(x = lifeExp)) +
+ggplot(dados1,aes(x = lifeExp)) +
   geom_freqpoly(binwidth = 5) +
   labs(title = "Distribuição da expectativa vida",
        x = "Anos",
        y = "Contagem")
 
 ### CLEVELAND DOT PLOT e TEXTO###
-ggplot(dados4,aes(x = lifeExp, y = reorder(country, lifeExp))) +
+ggplot(dados1,aes(x = lifeExp, y = reorder(country, lifeExp))) +
   geom_point(size = 3, color = "dodgerblue") +
   labs(title = "Expectativa devidaporpaís-2007",
        y = "País",
        x = "Anos")
 
-ggplot(dados4,aes(x = lifeExp, y = reorder(country, lifeExp))) +
+ggplot(dados1,aes(x = lifeExp, y = reorder(country, lifeExp))) +
   geom_point(size = 3, color = "dodgerblue") +
   geom_text(aes(label = round(lifeExp)), nudge_x = -1) +
   labs(title = "Expectativa devidaporpaís-2007",
@@ -157,7 +170,7 @@ ggplot(dados4,aes(x = lifeExp, y = reorder(country, lifeExp))) +
        x = "Anos")
 
 ### TEMAS ###
-ggplot(dados4,aes(x = lifeExp, y = reorder(country, lifeExp))) +
+ggplot(dados1,aes(x = lifeExp, y = reorder(country, lifeExp))) +
   geom_point(size = 3, color = "dodgerblue") +
   geom_text(aes(label = round(lifeExp)), nudge_x = 1) +
   labs(title = "Expectativa devidaporpaís-2007",
