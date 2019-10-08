@@ -21,11 +21,12 @@ dados4 <- read.csv2("dados4.csv")
 
 ###  BASICO  ###
 p = ggplot(iris, aes(x = Petal.Length, y = Petal.Width))
-p + geom_point()
+p = p + geom_point()
+p
 
 ### INTRO AO AES() ###
-ggplot(iris, aes(x = Petal.Length, y = Petal.Width, color=Species))
-+ geom_point()
+ggplot(iris, aes(x = Petal.Length, y = Petal.Width, color=Species)) + 
+  geom_point()
 
 aes() possui os seguintes parametros
 • Posição(x e y);
@@ -34,6 +35,23 @@ aes() possui os seguintes parametros
 • Preenchimento(fill);
 • Transparência(alpha);
 • Texto(label).
+
+### CORES ###
+#variaveis continuas
+ggplot(iris, aes(x = Petal.Length, y = Petal.Width, color = Sepal.Length)) + 
+  geom_point() +
+  scale_colour_gradient(low = "white",high = "black")
+
+#variaveis discretas
+ggplot(mtcars, aes(x = mpg,y = hp, color = factor(cyl)))+
+  geom_point() +
+  scale_color_manual(values = c("orange", "black", "red"))
+
+#As funções utilizadas para controlar 
+#as escalas dos elementos de um gráfico do ggplot2 seguem um padrão.
+#Todas iniciam-se com scale_, depois o nome do elemento estético
+#(color,fill,etc.)e,por fim,o tipo/nome
+#da escala que será aplicada.
 
 ### ESCALA ###
 p + scale_x_continuous(name = "Petal Length", breaks = seq(1,7,1)) +
@@ -48,7 +66,7 @@ wrap= p2 + facet_wrap(~ cut,scales = "free_x") ###
 #grid
 ggplot(diamonds, aes(x = carat, y = price)) +
   geom_point() +
-  facet_grid(~cut)
+  facet_grid(clarity~cut)
 
 ### BOXPLOT ###
 ggplot(iris, aes(x=Species, y=Petal.Width)) + 
@@ -79,7 +97,7 @@ ggplot(dados4,aes(x = country, y = lifeExp)) +
 
 ggplot(dados1,aes(x = continent, y = lifeExp, fill = factor(year))) +
   geom_col()
-  
+
 ggplot(dados1,aes(x = continent, y = lifeExp, fill = factor(year))) +
   geom_col(position = "dodge") +
   labs(title = "Expectativa devidaporcontinente",
