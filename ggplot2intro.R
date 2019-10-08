@@ -9,11 +9,11 @@ library(tidyverse)
 library(dplyr)
 
 ### DADOS UTILIZADOS ###
-
 dados1 <- read.csv2("dados1.csv")
 dados2 <- read.csv2("dados2.csv")
 dados3 <- read.csv2("dados3.csv")
 dados4 <- read.csv2("dados4.csv")
+
 ###  BASICO  ###
 p = ggplot(iris, aes(x = Petal.Length, y = Petal.Width))
 p + geom_point()
