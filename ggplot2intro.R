@@ -1,3 +1,8 @@
+### INTRO ###
+#Esta é uma introdução ao ggplot2, uma estrutura gráfica esteticamente agradável (e muito popular) no R. 
+#Este tutorial é voltado principalmente para aqueles que possuem algum conhecimento básico da linguagem de programação R
+#e desejam criar gráficos complexos e agradáveis com R ggplot2.
+
 ### INSTALAÇÃO DE PACOTES E BIBLIOTECAS ###
 install.packages("ggplot2")
 install.packages("tidyverse")
